@@ -1,0 +1,20 @@
+{
+  "name": "talk-a-tive",
+  "version": "1.0.0",
+  "description": "Team : Ankit Chowdhury, Harsh Pandey, Dinesh Jakhar\r hello",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon backend/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": " "
+  },
+  "author": "Harsh Pandey",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22"
+  }
+}
