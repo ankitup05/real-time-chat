@@ -7,7 +7,8 @@ dotenv.config();
 app.get('/',(req,res)=>{res.send("API is running Successfully")});
 
 app.get("/api/chat",(req,res)=>{
-    res.send(chats)
+    // console.log(chats);
+    res.send(chats);
 });
 
 app.get("/api/chat/:id", (req, res) => {
