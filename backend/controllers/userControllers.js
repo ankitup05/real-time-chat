@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const User = require("../models/userModel");
+const User = require("../Models/userModel");
 const generateToken = require("../config/generateToken");
 
 
@@ -62,5 +62,21 @@ const authUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid Email or Password");
   }
 });
-const regauth={registerUser,authUser};
+//  /api/user?seaarch=dinesh
+const allUsers=asyncHandler(async(req,res)=>{
+ const keyword=req.query.search?{
+  $or:[
+    {
+      name:{$regex:req.query.search,$options:"i"}
+      
+    },
+    {
+      email:{$regex:req.query.search,$options:"i"}
+    }
+  ]
+}:{};
+const users=await User.find(keyword).find({_id:{$ne:req.user._id}});
+  res.send(users);
+});
+const regauth={registerUser,authUser,allUsers};
 module.exports = regauth;
