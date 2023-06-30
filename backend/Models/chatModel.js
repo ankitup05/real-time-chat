@@ -5,7 +5,7 @@
 //groupAdmin   
 
 const mongoose=require('mongoose')
-const ChatModel = mongoose.Schema({
+const chatModel = mongoose.Schema({
   chatName: { type: String, trim: true },
   isGroupChat: { type: Boolean, default: false },
   users: [
