@@ -1,8 +1,10 @@
 import { ViewIcon } from '@chakra-ui/icons'
-import {  IconButton,ModalFooter,ModalHeader ,useDisclosure ,ModalCloseButton,Modal,ModalOverlay,ModalBody,ModalContent,Button, useToast, Box, FormControl, Input} from '@chakra-ui/react'
+import {  IconButton,ModalFooter,ModalHeader ,useDisclosure ,ModalCloseButton,Modal,ModalOverlay,ModalBody,ModalContent,Button, useToast, Box, FormControl, Input, Spinner} from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider'
 import UserBadgeItem from '../UserAvatar/UserBadgeItem'
+import axios from 'axios'
+import UserListItem from '../UserAvatar/UserListItem'
 
 const UpdateGroupChatModal = ({fetchAgain,setFetchAgain}) => {
    const { isOpen, onOpen, onClose } = useDisclosure()
@@ -12,15 +14,168 @@ const UpdateGroupChatModal = ({fetchAgain,setFetchAgain}) => {
   const [loading,setLoading]=useState(false);
   const [renameloading,setRenameloading]=useState(false);
 
- const toast =useToast()
+ const toast =useToast();
 
    const {selectedChat,setSelectedChat,user}=ChatState();
-const handleRemove=()=>{
-
+const handleRemove=async(user1)=>{
+if(selectedChat.groupAdmin._id!==user._id&&user1._id!==user._id){
+  toast({
+    title:"Only admins can remove someone!",
+    
+          status:"error",
+          duration:5000,
+          isClosable:true,
+          position:"bottom",
+  });
+  return;
 }
-const handleRename=()=>{
 
+try {
+  setLoading(true);
+const config={
+    headers:{
+      Authorization:`Bearer ${user.token}`,
+    },
+  };
+  const {data}=await axios.put('/api/chat/groupremove',{
+    chatId:selectedChat._id,
+    userId:user1._id,
+  },config);
+  user1._id===user._id?setSelectedChat():setSelectedChat(data);
+  setFetchAgain(!fetchAgain);
+  setLoading(false);
+
+} catch (error) {
+  toast({
+    title:"Error Occured!",
+    description:error.response.data.message,
+          status:"error",
+          duration:5000,
+          isClosable:true,
+          position:"bottom",
+  });
+  setLoading(false);
 }
+
+};
+
+const handleAddUser=async(user1)=>{
+  if(selectedChat.users.find((u)=>u._id===user1._id)){
+    toast({
+    title:"User Already in Group",
+    
+          status:"error",
+          duration:5000,
+          isClosable:true,
+          position:"bottom",
+  });
+  return;
+  }
+if(selectedChat.groupAdmin._id!==user._id){
+  toast({
+    title:"Only admins can add someone!",
+    
+          status:"error",
+          duration:5000,
+          isClosable:true,
+          position:"bottom",
+  });
+  return;
+}
+
+try {
+  setLoading(true);
+const config={
+    headers:{
+      Authorization:`Bearer ${user.token}`,
+    },
+  };
+  const {data}=await axios.put('/api/chat/groupadd',{
+    chatId:selectedChat._id,
+    userId:user1._id,
+  },config);
+  setSelectedChat(data);
+  setFetchAgain(!fetchAgain);
+  setLoading(false);
+
+} catch (error) {
+  toast({
+    title:"Error Occured!",
+    description:error.response.data.message,
+          status:"error",
+          duration:5000,
+          isClosable:true,
+          position:"bottom",
+  });
+  setLoading(false);
+}
+
+};
+const handleRename=async()=>{
+if(!groupChatName)return
+try {
+  setRenameloading(true)
+  const config={
+    headers:{
+      Authorization:`Bearer ${user.token}`,
+    },
+  };
+  const {data}=await axios.put('/api/chat/rename',{
+    chatId:selectedChat._id,
+    chatName:groupChatName,
+  },config
+  );
+  setSelectedChat(data);
+  setFetchAgain(!fetchAgain);
+  setRenameloading(false);
+
+} catch (error) {
+  toast({
+    title:"Error Occured!",
+    description:error.response.data.message,
+          status:"error",
+          duration:5000,
+          isClosable:true,
+          position:"bottom",
+  });
+  setRenameloading(false);
+}
+setgroupChatName("");
+
+};
+
+
+const handleSearch=async(query)=>{
+      setSearch(query);
+      if(!query){
+        return;
+      }
+      try {
+        setLoading(true);
+        const config={
+          headers:{
+            Authorization:`Bearer ${user.token}`,
+          },
+        };
+        const {data}=await axios.get(`/api/user?search=${search}`,config);
+        console.log(data);
+        setLoading(false);
+        setSearchResult(data);
+      } catch (error) {
+        toast({
+          title:"Error Occured!",
+          description:"Failed to Load the Search Results",
+          status:"error",
+          duration:5000,
+          isClosable:true,
+          position:"bottom-left",
+        })
+      }
+
+    };
+
+
+
 
      return (
     <>
@@ -59,7 +214,7 @@ const handleRename=()=>{
                 colorScheme='teal'
                 ml={1}
                 isLoading={renameloading}
-                onClick={handleRemove}
+                onClick={handleRename}
                 >
                     Update
                 </Button>
@@ -73,7 +228,7 @@ const handleRename=()=>{
                 
                 onChange={(e)=>handleSearch(e.target.value)}
                 />
-                <Button 
+               {/*} <Button 
                 variant={"solid"}
                 colorScheme='teal'
                 ml={1}
@@ -82,7 +237,18 @@ const handleRename=()=>{
                 >
                     Update
                 </Button>
-            </FormControl>
+            */}            </FormControl>
+            {loading ? (
+              <Spinner size={"1g"}/>
+            ):(
+              searchResult?.map((user)=>(
+                <UserListItem 
+                key={user._id}
+                user={user}
+                handleFunction={()=>handleAddUser(user)}
+                />
+              ))
+            )}
 
 
           </Box>
@@ -90,8 +256,8 @@ const handleRename=()=>{
           
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
-              Close
+            <Button colorScheme='red' mr={3} onClick={()=>handleRemove(user)}>
+              Leave Group
             </Button>
   
           </ModalFooter>

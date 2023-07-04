@@ -38,6 +38,7 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
        <UpdateGroupChatModal fetchAgain={fetchAgain} setFetchAgain={setFetchAgain}/>
        </>
        )}
+       </Text>
        <Box
        display={"flex"}
        flexDir={"column"}
@@ -51,9 +52,9 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
        >
         
        </Box>
-    </Text>
+    
     </>):(
-        <Box display="flex" alignItems="center" justifiedcontent="center" h="100%">
+        <Box display="flex" alignItems="center" justifiedContent="center" h="100%">
             <Text fontSize="3xl" pb={3} fontFamily="Work sans">
                 Click on a user to start chatting
             </Text>
