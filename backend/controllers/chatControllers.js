@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
-const Chat = require("../Models/chatModel");
-const User = require("../Models/userModel");
+const Chat = require("../models/chatModel");
+const User = require("../models/userModel");
 
 //@description     Create or fetch One to One Chat
 //@route           POST /api/chat/
@@ -91,7 +91,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
   }
 
   users.push(req.user);
- 
+
   try {
     const groupChat = await Chat.create({
       chatName: req.body.name,

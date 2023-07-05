@@ -1,48 +1,46 @@
-import React, { useEffect, useState } from 'react'
-import { ChatState } from '../Context/ChatProvider';
-import { Box, Button, useToast,Text, Stack } from '@chakra-ui/react';
-import axios from 'axios';
-import { AddIcon } from '@chakra-ui/icons';
-import ChatLoading from './ChatLoading';
-import { getSender } from '../congif/ChatLogics';
-import GroupChatModal from './miscellaneous/GroupChatModal';
+import React, { useEffect, useState } from "react";
+import { ChatState } from "../Context/ChatProvider";
+import { Box, Button, useToast, Text, Stack } from "@chakra-ui/react";
+import axios from "axios";
+import { AddIcon } from "@chakra-ui/icons";
+import ChatLoading from "./ChatLoading";
+import { getSender } from "../config/ChatLogics";
+import GroupChatModal from "./miscellaneous/GroupChatModal";
 
+const MyChats = ({ fetchAgain }) => {
+  const [loggedUser, setLoggedUser] = useState();
 
+  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
+  const toast = useToast();
 
-const MyChats = ({fetchAgain}) => {
-    const [loggedUser, setLoggedUser] = useState();
-
-    const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
-    const toast = useToast();
-
-    const fetchChats = async () => {
-        // console.log(user._id);
-        try {
-          const config = {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          };
-    
-          const { data } = await axios.get("/api/chat", config);
-          setChats(data);
-        } catch (error) {
-          toast({
-            title: "Error Occured!",
-            description: "Failed to Load the chats",
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-            position: "bottom-left",
-          });
-        }
+  const fetchChats = async () => {
+    // console.log(user._id);
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
       };
 
-      useEffect(() => {
-        setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
-        fetchChats();
-        // eslint-disable-next-line
-      }, [fetchAgain]);
+      const { data } = await axios.get("/api/chat", config);
+      setChats(data);
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: "Failed to Load the chats",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
+
+  useEffect(() => {
+    setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
+    fetchChats();
+    // eslint-disable-next-line
+  }, [fetchAgain]);
 
   return (
     <Box
@@ -53,8 +51,8 @@ const MyChats = ({fetchAgain}) => {
       bg="white"
       width={{ base: "100%", md: "31%" }}
       borderRadius="lg"
-      borderWidth="1px">
-
+      borderWidth="1px"
+    >
       <Box
         paddingBottom={3}
         paddingX={3}
@@ -65,8 +63,8 @@ const MyChats = ({fetchAgain}) => {
         justifyContent="space-between"
         alignItems="center"
       >
-         My Chats
-         <GroupChatModal> 
+        My Chats
+        <GroupChatModal>
           <Button
             display="flex"
             fontSize={{ base: "17px", md: "10px", lg: "17px" }}
@@ -74,7 +72,7 @@ const MyChats = ({fetchAgain}) => {
           >
             New Group Chat
           </Button>
-         </GroupChatModal> 
+        </GroupChatModal>
       </Box>
       <Box
         display="flex"
@@ -86,7 +84,7 @@ const MyChats = ({fetchAgain}) => {
         borderRadius="lg"
         overflowY="hidden"
       >
-{chats ? (
+        {chats ? (
           <Stack overflowY="scroll">
             {chats.map((chat) => (
               <Box
@@ -119,9 +117,8 @@ const MyChats = ({fetchAgain}) => {
           <ChatLoading />
         )}
       </Box>
-
     </Box>
-  )
-}
+  );
+};
 
-export default MyChats
+export default MyChats;
