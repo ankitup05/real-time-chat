@@ -13,6 +13,8 @@ import { IconButton } from "@chakra-ui/react";
 import "./styles.css";
 // import { ArrowBackIcon } from '@chakra-ui/icons';
 import io from "socket.io-client";
+import Lottie from "react-lottie"
+import animationData from "../animations/typing.json"
 
 const ENDPOINT = "http://localhost:9000"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
 var socket, selectedChatCompare;
@@ -27,6 +29,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false); 
 
   const toast = useToast();
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -221,13 +233,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             >
              {istyping ? (
                 <div>
-                  {/* <Lottie
+                  <Lottie
                     options={defaultOptions}
                     // height={50}
                     width={70}
                     style={{ marginBottom: 15, marginLeft: 0 }}
-                  /> */}
-                  loading...
+                  />
+                  
                 </div>
               ) : (
                 <></>

@@ -64,4 +64,8 @@ const io = require("socket.io")(server, {
           socket.in(user._id).emit("message recieved", newMessageRecieved);
         });
     });
+    socket.off("setup", () => {
+      console.log("USER DISCONNECTED");
+      socket.leave(userData._id);
+    });
 });
