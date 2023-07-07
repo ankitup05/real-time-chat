@@ -20,7 +20,7 @@ const Homepage = () => {
     <Box d="flex" justifyContent={"center"} p={3} bg={"white"} w="100%"
       m= "40px 0 15px 0" borderRadius="lg" borderwidth="1px"
       className='Container'>
-      <Text fontSize={"4xl"} fontFamily={"Work sans"} color={"black"}>Talk-a-Tive</Text>
+      <Text fontSize={"4xl"} fontFamily={"Work sans"} color={"black"}>ChatterBox</Text>
     </Box>
     <Box bg="white" w="100%" p={4} borderRadius="lg" borderwidth="1px">
       <Tabs variant='soft-rounded' >
