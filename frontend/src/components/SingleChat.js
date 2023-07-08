@@ -20,7 +20,7 @@ const ENDPOINT = "http://localhost:9000"; // "https://talk-a-tive.herokuapp.com"
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
-  const { user, selectedChat, setSelectedChat } = ChatState();
+  const { user, selectedChat, setSelectedChat ,setNotification,notification} = ChatState();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -90,6 +90,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   }, [selectedChat]);
 
+  // console.log(notification,'--------')
 
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
@@ -97,10 +98,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         !selectedChatCompare || // if chat is not selected or doesn't match current chat
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
-        // if (!notification.includes(newMessageRecieved)) {
-        //   setNotification([newMessageRecieved, ...notification]);
-        //   setFetchAgain(!fetchAgain);
-        // }
+        if (!notification.includes(newMessageRecieved)) {
+          setNotification([newMessageRecieved, ...notification]);
+          setFetchAgain(!fetchAgain);
+        }
       } else {
         setMessages([...messages, newMessageRecieved]);
       }
