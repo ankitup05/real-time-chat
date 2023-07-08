@@ -17,7 +17,7 @@ app.use(express.json()); // to accept json data
    
 app.get('/',(req,res)=>{res.send("API is running Successfully")});
  
-app.use('/api/user',userRoutes)
+app.use("/api/user",userRoutes)
 app.use("/api/chat",chatRoutes);
 app.use("/api/message", messageRoutes);
 
