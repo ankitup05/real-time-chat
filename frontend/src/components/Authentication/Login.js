@@ -2,12 +2,17 @@ import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+// const location =useLocation();
 
 const Login = () => {
+
+
+
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const toast = useToast();
@@ -17,7 +22,7 @@ const Login = () => {
 
   const history = useHistory();
 
-  const submitHandler = async () => {
+  const submitHandler =async () => {
     setLoading(true);
     if (!email || !password) {
       toast({
@@ -46,6 +51,9 @@ const Login = () => {
       );
 
       // console.log(JSON.stringify(data));
+    //   setTimeout(function(){
+    //     window.location.reload();
+    //  }, 1000);
       toast({
         title: "Login Successful",
         status: "success",
@@ -53,9 +61,10 @@ const Login = () => {
         isClosable: true,
         position: "bottom",
       });
+      
       localStorage.setItem("userInfo", JSON.stringify(data));
-      setLoading(false);
       history.push("/chats");
+      setLoading(false);
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -69,6 +78,7 @@ const Login = () => {
     }
     
   };
+
 
   return (
     <VStack spacing="10px">

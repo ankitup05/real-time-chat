@@ -9,12 +9,18 @@ import GroupChatModal from "./miscellaneous/GroupChatModal";
 
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
+  // useEffect(() => {
+  //   //Runs only on the first render
+  //   window.location.reload();
+  // },[]);
+
 
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
   const toast = useToast();
 
   const fetchChats = async () => {
     // console.log(user._id);
+    // window.location.reload();
     try {
       const config = {
         headers: {
