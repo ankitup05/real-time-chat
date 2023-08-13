@@ -51,9 +51,9 @@ const Login = () => {
       );
 
       // console.log(JSON.stringify(data));
-    //   setTimeout(function(){
-    //     window.location.reload();
-    //  }, 1000);
+      setTimeout(function(){
+        window.location.reload();
+     }, 1000);
       toast({
         title: "Login Successful",
         status: "success",
