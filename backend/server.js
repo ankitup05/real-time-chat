@@ -31,8 +31,8 @@ const server=app.listen(PORT,console.log(`Server started on port ${PORT}`.yellow
 const io = require("socket.io")(server, {
     pingTimeout: 60000,
     cors: {
-      origin: "https://real-time-chats-backend.onrender.com",
-      // credentials: true,
+      origin: "https://real-time-chat-9790yx3b4-ankitup05.vercel.app",
+      credentials: true,
     },
   });
 
