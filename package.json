@@ -4,7 +4,8 @@
     "description": "Team : Ankit Chowdhury, Harsh Pandey, Dinesh Jakhar\r hello",
     "main": "server.js",
     "scripts": {
-      "start": "nodemon backend/server.js"
+      "start": "node backend/server.js",
+      "build": "npm install && npm install --force --prefix frontend && npm run build --prefix frontend"
     },
     "repository": {
       "type": "git",
